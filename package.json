@@ -1,0 +1,14 @@
+{
+  "name": "qa-engineer-recruitment-test",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "playwright test",
+    "dev": "playwright test --debug"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.57.0",
+    "@types/node": "^25.0.6",
+    "dotenv": "^17.2.3"
+  }
+}
