@@ -1,37 +1,46 @@
 import { expect, test } from "@playwright/test";
 import dotenv from 'dotenv';
+import { LoginPage } from "../pages/LoginPage.ts";
+import { DataSourcesPage } from "../pages/DataSourcesPage.ts";
+import { SimulatePage } from "../pages/SimulatePage.ts";
 import { randomString } from "../utils/functions.js";
 
 dotenv.config();
 
 test.describe("Lyro AI tests", () => {
-  test.use({ storageState: "auth.json" });
   test("Test Lyro added data source", async ({ page }) => {
-    await test.step("Open dashboard (authenticated)", async () => {
+    await test.step("Login to project", async () => {
+      const loginPage = new LoginPage(page);
+      const loginEmailInput = loginPage.loginEmailInput;
+      const loginPasswordInput = loginPage.loginPasswordInput;
+      const loginButton = loginPage.loginButton;
+
       await page.goto(
         `https://${process.env.DOMAIN}/panel/?project_public_key=${process.env.PROJECT_PUBLIC_KEY}&api_token=${process.env.API_TOKEN}`
       );
-      //await page.goto("https://www.tidio.com/panel/login");
-      await page.getByRole("textbox", { name: "Email input field" }).fill(process.env.LYRO_USER || "");
-      await page.getByRole("textbox", { name: "Password input field" }).fill(process.env.LYRO_PASS || "");
-      await page.getByRole("button", { name: "Log in" }).nth(0).click();
+      await page.goto("https://www.tidio.com/panel/login");
+      await loginEmailInput.fill(process.env.LYRO_USER || "");
+      await loginPasswordInput.fill(process.env.LYRO_PASS || "");
+      await loginButton.click();
       await expect(
         page.getByRole("heading", { name: "Dashboard" })
       ).toBeInViewport();
     });
+
     await test.step("Test from data sources section", async () => {
-      const testLyroInputMessage = page.getByTestId("newMessageTextarea");
+      const dataSourcesPage = new DataSourcesPage(page);
+      const appContentHeader = dataSourcesPage.appContentHeader;
+      const dataSourcesSection = dataSourcesPage.dataSourcesSection;
+      const testLyroButton = dataSourcesPage.testLyroButton;
+      const testLyroInputMessage = dataSourcesPage.testLyroInputMessage;
       const randomMessage = randomString(8);
 
       await page.goto(
         `https://${process.env.DOMAIN}/panel/lyro-ai/data-sources/added`
       );
-      await expect(
-        page.locator("#app-content-header").getByText("Lyro AI Agent")
-      ).toBeInViewport();
-      await expect(page.getByRole("heading", { name: "Data sources" })
-      ).toBeInViewport();
-      await page.getByRole("button", { name: "Test Lyro" }).click();
+      await expect(appContentHeader.getByText("Lyro AI Agent")).toBeInViewport();
+      await expect(dataSourcesSection).toBeInViewport();
+      await testLyroButton.click();
 
       await expect(
         page.getByText("Hello, how can I help you?", { exact: false })
@@ -51,17 +60,18 @@ test.describe("Lyro AI tests", () => {
     });
 
     await test.step("Simulate visitor and test from widget side", async () => {
-      const simulateVisitorInputMessage = page.getByTestId("newMessageTextarea");
+      const simulatePage = new SimulatePage(page);
+      const inboxSection = simulatePage.inboxSection;
+      const simulateConversationButton = simulatePage.simulateConversationButton;
+      const simulateVisitorInputMessage = simulatePage.simulateVisitorInputMessage;
+      const chatWithUsButton = simulatePage.chatWithUsButton;
       const simulateVisitorRandomMessage = randomString(7);
 
       await page.locator('[data-test-id="inbox-section-button"]').click();
-      await expect(
-        page.getByRole("heading", { name: "Inbox" })
-      ).toBeInViewport();
+      await expect(inboxSection).toBeInViewport();
       
       const [simulateVisitorPage] = await Promise.all([
-        page.waitForEvent("popup"),
-        page.getByRole("button", { name: "Simulate a conversation" }).click(),
+        page.waitForEvent("popup"),simulateConversationButton.click(),
       ]);
       
       await simulateVisitorPage.waitForLoadState();
@@ -69,7 +79,7 @@ test.describe("Lyro AI tests", () => {
       .toHaveURL("https://www.tidio.com/panel/simulateVisitor?projectPublicKey=b7exsgtovbxc3jyuceg2nzn8jrq4rkcz");
       
       if (!(await simulateVisitorInputMessage.isVisible())) {
-        await page.locator('button:has-text("Chat with us")').click();
+        await chatWithUsButton.click();
         await expect(simulateVisitorInputMessage).toBeVisible({ timeout: 5000 });
       } else {
         await expect(simulateVisitorInputMessage).toBeVisible();
