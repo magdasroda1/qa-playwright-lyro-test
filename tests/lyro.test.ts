@@ -1,4 +1,14 @@
 import { expect, test } from "@playwright/test";
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+const DOMAIN = process.env.DOMAIN;
+const PROJECT_PUBLIC_KEY = process.env.PPROJECT_PUBLIC_KEY;
+const API_TOKEN = process.env.API_TOKEN;
+const UA = process.env.UA;
+const LYRO_USER = process.env.LYRO_USER;
+const LYRO_PASS = process.env.LYRO_PASS;
 
 test.describe("Lyro AI tests", () => {
   test("Test Lyro added data source", async ({ page }) => {

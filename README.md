@@ -1,11 +1,27 @@
 # QA Engineer Recruitment test
 
+## Overview
+
+This project contains the QA Engineer recruitment test for Lyro AI using Playwright v1.57.0.
+
 ## Before you start
 
 The test is based on Playwright v1.57.0. You can find the full playwright documentation [here](https://playwright.dev/docs/intro). To build the project you will need [Node.js](https://nodejs.org/en/download/) and [Yarn](https://yarnpkg.com/getting-started/install).
 In the file `lyro.test.ts` are the initial steps of the test.
 
 Before starting, create an `.env` file in the main directory and put shared values into it. Without this, you will not be able to log in to the test project.
+
+## Setup
+
+1. Clone this repository locally:
+   git clone https://github.com/magdasroda1/qa-playwright-lyro-test.git
+   cd qa-playwright-lyro-test
+2. Install dependencies 
+    yarn
+    yarn playwright install 
+3. Create an .env file in the project root and add shared credentials (do not push this file):
+    LYRO_USER=
+    LYRO_PASS=
 
 ### Commands
 
