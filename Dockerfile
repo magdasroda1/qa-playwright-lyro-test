@@ -1,5 +1,5 @@
 # Official Playwright image with Node and browsers
-FROM mcr.microsoft.com/playwright:v1.57.0-focal
+FROM mcr.microsoft.com/playwright:v1.57.0-jammy
 
 # Set working directory
 WORKDIR /usr/src/app

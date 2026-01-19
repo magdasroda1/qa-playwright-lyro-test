@@ -62,3 +62,34 @@ Add two missing steps to the test case:
 Containerize the project using Docker (use the official Playwright image or a custom one). Please include instructions in the README on how to run tests from the Docker container. You can also add a pipeline to build the project and execute the tests.
 
 Good luck!
+
+## Docker (Part 2)
+
+This project can be run inside a Docker container using the official Playwright Docker image, which includes all required browsers and system dependencies.
+
+## Requirements
+
+- Docker installed and running
+
+- Build Docker image: from the project root directory, run:
+
+### `docker build -t lyro-playwright-tests .`
+
+- Run tests in Docker: to execute the Playwright tests inside the container:
+
+### `docker run --rm lyro-playwright-tests`
+
+- Run Docker container with environment variables
+
+The tests require environment variables stored in the .env file.
+Pass them to the container using the --env-file flag:
+
+### `docker run --rm --env-file .env lyro-playwright-tests`
+
+## Notes
+
+- Tests are executed in headless mode inside the container
+- The Docker image is based on the official Playwright image
+- No local browser installation is required when using Docker
+
+

@@ -10,18 +10,9 @@ dotenv.config();
 test.describe("Lyro AI tests", () => {
   test("Test Lyro added data source", async ({ page }) => {
     await test.step("Login to project", async () => {
-      const loginPage = new LoginPage(page);
-      const loginEmailInput = loginPage.loginEmailInput;
-      const loginPasswordInput = loginPage.loginPasswordInput;
-      const loginButton = loginPage.loginButton;
-
       await page.goto(
         `https://${process.env.DOMAIN}/panel/?project_public_key=${process.env.PROJECT_PUBLIC_KEY}&api_token=${process.env.API_TOKEN}`
       );
-      await page.goto("https://www.tidio.com/panel/login");
-      await loginEmailInput.fill(process.env.LYRO_USER || "");
-      await loginPasswordInput.fill(process.env.LYRO_PASS || "");
-      await loginButton.click();
       await expect(
         page.getByRole("heading", { name: "Dashboard" })
       ).toBeInViewport();
