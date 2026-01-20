@@ -67,24 +67,24 @@ Good luck!
 
 This project can be run inside a Docker container using the official Playwright Docker image, which includes all required browsers and system dependencies.
 
-## Requirements
+### Requirements
 
 - Docker installed and running
 
 - Build Docker image: from the project root directory, run:
 
-### `docker build -t lyro-playwright-tests .`
+#### `docker build -t lyro-playwright-tests .`
 
 - Run tests in Docker: to execute the Playwright tests inside the container:
 
-### `docker run --rm lyro-playwright-tests`
+#### `docker run --rm lyro-playwright-tests`
 
 - Run Docker container with environment variables
 
 The tests require environment variables stored in the .env file.
 Pass them to the container using the --env-file flag:
 
-### `docker run --rm --env-file .env lyro-playwright-tests`
+#### `docker run --rm --env-file .env lyro-playwright-tests`
 
 ## Notes
 
